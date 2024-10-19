@@ -8,7 +8,10 @@ import {
   deleteContactController,
 } from '../controllers/contacts.js';
 import { validateBody } from '../middlewares/validateBody.js';
-import { createStudentSchema } from '../validation/contacts.js';
+import {
+  createContactSchema,
+  updateContactSchema,
+} from '../validation/contacts.js';
 import { isValidId } from '../middlewares/isValidId.js';
 
 const router = Router();
@@ -20,13 +23,13 @@ router.get(
 );
 router.post(
   '/contacts',
-  validateBody(createStudentSchema),
+  validateBody(createContactSchema),
   ctrlWrapper(createContactController),
 );
 router.patch(
   '/contacts/:contactId',
   isValidId,
-  validateBody(),
+  validateBody(updateContactSchema),
   ctrlWrapper(updateContactController),
 );
 router.delete(
