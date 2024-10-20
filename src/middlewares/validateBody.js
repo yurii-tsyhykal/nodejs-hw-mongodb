@@ -6,7 +6,7 @@ export const validateBody = (schema) => async (req, res, next) => {
     next();
   } catch (e) {
     const error = createHttpError(
-      404,
+      400,
       e.details.map((e) => e.message).join('-'),
     );
     next(error);

@@ -41,7 +41,6 @@ export const updateContactSchema = Joi.object({
     .pattern(/^\+380\d{9}$/)
     .min(3)
     .max(20)
-    .required()
     .messages({
       'string.base': 'Phone number should be a string',
       'string.pattern.base':
@@ -57,5 +56,4 @@ export const updateContactSchema = Joi.object({
     .max(20)
     .valid('work', 'home', 'personal')
     .default('personal')
-    .required(),
 });
