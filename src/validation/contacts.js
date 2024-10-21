@@ -31,11 +31,10 @@ export const createContactSchema = Joi.object({
 });
 
 export const updateContactSchema = Joi.object({
-  name: Joi.string().min(3).max(20).required().messages({
+  name: Joi.string().min(3).max(20).messages({
     'string.base': 'Username should be a string',
     'string.min': 'Username should have at least {#limit} characters',
     'string.max': 'Username should have at most {#limit} characters',
-    'any.required': 'Username is required',
   }),
   phoneNumber: Joi.string()
     .pattern(/^\+380\d{9}$/)
@@ -47,7 +46,6 @@ export const updateContactSchema = Joi.object({
         'Phone number must start with +380 and contain exactly 9 digits after it',
       'string.min': 'Phone number should have at least {#limit} digits',
       'string.max': 'Phone number should have at most {#limit} digits',
-      'any.required': 'Phone number is required.',
     }),
   email: Joi.string().min(3).max(20).email(),
   isFavourite: Joi.boolean().default(false),
@@ -55,5 +53,5 @@ export const updateContactSchema = Joi.object({
     .min(3)
     .max(20)
     .valid('work', 'home', 'personal')
-    .default('personal')
+    .default('personal'),
 });
