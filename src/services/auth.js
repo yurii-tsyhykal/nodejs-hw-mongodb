@@ -1,9 +1,8 @@
 import createHttpError from 'http-errors';
 import { userCollection } from '../models/user.js';
 import bcrypt from 'bcrypt';
-import { randomBytes } from 'crypto';
 import { sessionCollection } from '../models/session.js';
-import { FIFTEEN_MINUTES, THIRTY_DAY } from '../constants/index.js';
+import { createTokensForSession } from '../utils/createTokensForSession.js';
 
 export const registerUser = async (newUserData) => {
   const user = await userCollection.findOne({ email: newUserData.email });
@@ -19,27 +18,50 @@ export const registerUser = async (newUserData) => {
 
 export const loginUser = async (userData) => {
   const isUser = await userCollection.findOne({ email: userData.email });
-  console.log(isUser);
 
   if (!isUser) {
     throw createHttpError(401, 'User not found');
   }
   const isPassword = bcrypt.compare(userData.password, isUser.password);
-  console.log(isPassword);
   if (!isPassword) {
     throw createHttpError(401, 'Unauthorized');
   }
 
   await sessionCollection.deleteOne({ userId: isUser._id });
 
-  const accessToken = randomBytes(30).toString('base64');
-  const refreshToken = randomBytes(30).toString('base64');
+  const newSession = createTokensForSession();
 
   return await sessionCollection.create({
     userId: isUser._id,
-    accessToken,
+    ...newSession,
+  });
+};
+
+export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
+  const session = await sessionCollection.findOne({
+    _id: sessionId,
     refreshToken,
-    accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
-    refreshTokenValidUntil: new Date(Date.now() + THIRTY_DAY),
+  });
+
+  if (!session) {
+    throw createHttpError(401, 'Session not found');
+  }
+
+  const isRefreshTokenExpired =
+    new Date() > new Date(session.refreshTokenValidUntil);
+
+  if (isRefreshTokenExpired) {
+    throw createHttpError(401, 'Session is expired');
+  }
+
+  await sessionCollection.deleteOne({
+    _id: sessionId,
+    refreshToken,
+  });
+  const newSession = createTokensForSession();
+
+  return await sessionCollection.create({
+    userId: session.userId,
+    ...newSession,
   });
 };
