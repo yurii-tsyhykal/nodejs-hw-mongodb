@@ -3,7 +3,7 @@ import authRouter from './auth.js';
 import contactsRouter from './contacts.js';
 const router = express.Router();
 
-router.use(authRouter);
-router.use(contactsRouter);
+router.use('/auth', authRouter);
+router.use('/contacts', contactsRouter);
 
 export default router;

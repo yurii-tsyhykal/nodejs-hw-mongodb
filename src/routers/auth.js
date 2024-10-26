@@ -4,22 +4,24 @@ import { validateBody } from '../middlewares/validateBody.js';
 import { createUserSchema, loginUserSchema } from '../validation/auth.js';
 import {
   loginUserController,
+  logoutUserController,
   refreshUsersSessionController,
   registerUserController,
 } from '../controllers/auth.js';
 
 const router = express.Router();
 router.post(
-  '/auth/register',
+  '/register',
   validateBody(createUserSchema),
   ctrlWrapper(registerUserController),
 );
 
 router.post(
-  '/auth/login',
+  '/login',
   validateBody(loginUserSchema),
   ctrlWrapper(loginUserController),
 );
 
-router.post('/auth/refresh', ctrlWrapper(refreshUsersSessionController));
+router.post('/refresh', ctrlWrapper(refreshUsersSessionController));
+router.post('/logout', ctrlWrapper(logoutUserController));
 export default router;

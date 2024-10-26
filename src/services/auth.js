@@ -1,7 +1,7 @@
 import createHttpError from 'http-errors';
-import { userCollection } from '../models/user.js';
+import { userCollection } from '../db/models/user.js';
 import bcrypt from 'bcrypt';
-import { sessionCollection } from '../models/session.js';
+import { sessionCollection } from '../db/models/session.js';
 import { createTokensForSession } from '../utils/createTokensForSession.js';
 
 export const registerUser = async (newUserData) => {
@@ -27,9 +27,9 @@ export const loginUser = async (userData) => {
     throw createHttpError(401, 'Unauthorized');
   }
 
-  await sessionCollection.deleteOne({ userId: isUser._id });
-
   const newSession = createTokensForSession();
+
+  await sessionCollection.deleteOne({ userId: isUser._id });
 
   return await sessionCollection.create({
     userId: isUser._id,
@@ -54,14 +54,18 @@ export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
     throw createHttpError(401, 'Session is expired');
   }
 
+  const newSession = createTokensForSession();
+
   await sessionCollection.deleteOne({
     _id: sessionId,
     refreshToken,
   });
-  const newSession = createTokensForSession();
 
   return await sessionCollection.create({
     userId: session.userId,
     ...newSession,
   });
 };
+
+export const logoutUser = (sessionId) =>
+  sessionCollection.deleteOne({ _id: sessionId });
