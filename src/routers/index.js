@@ -2,7 +2,7 @@ import express from 'express';
 import authRouter from './auth.js';
 import contactsRouter from './contacts.js';
 const router = express.Router();
-router.use('/', (req, res) => {
+router.get('/', (req, res) => {
   res.send('Jare Jare Daze');
 });
 router.use('/auth', authRouter);
