@@ -26,7 +26,7 @@ export const loginUser = async (userData) => {
   if (!isUser) {
     throw createHttpError(401, 'User not found');
   }
-  const isPassword = bcrypt.compare(userData.password, isUser.password);
+  const isPassword = await bcrypt.compare(userData.password, isUser.password);
   if (!isPassword) {
     throw createHttpError(401, 'Unauthorized');
   }
@@ -127,7 +127,7 @@ export const resetPassword = async (payload) => {
     throw createHttpError(404, 'User not found');
   }
 
-  const encryptedPassword = await bcrypt.hash(payload.password, 14);
+  const encryptedPassword = await bcrypt.hash(payload.password, 12);
 
   await userCollection.updateOne(
     { _id: user._id },
