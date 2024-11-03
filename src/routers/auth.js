@@ -4,13 +4,15 @@ import { validateBody } from '../middlewares/validateBody.js';
 import {
   createUserSchema,
   loginUserSchema,
-  sendResetEmail,
+  resetPasswordSchema,
+  sendResetEmailSchema,
 } from '../validation/auth.js';
 import {
   loginUserController,
   logoutUserController,
   refreshUsersSessionController,
   registerUserController,
+  resetPasswordController,
   sendResetEmailController,
 } from '../controllers/auth.js';
 import { authenticate } from '../middlewares/authenticate.js';
@@ -33,7 +35,12 @@ router.post('/logout', ctrlWrapper(logoutUserController));
 router.use(authenticate);
 router.post(
   '/send-reset-email',
-  validateBody(sendResetEmail),
+  validateBody(sendResetEmailSchema),
   ctrlWrapper(sendResetEmailController),
+);
+router.post(
+  '/reset-password',
+  validateBody(resetPasswordSchema),
+  ctrlWrapper(resetPasswordController),
 );
 export default router;
