@@ -1,0 +1,35 @@
+application/json:
+        schema: 
+          type: object
+          properties:
+            name:
+              description: 'Username should be between 3 and 20 characters long'
+              type: string
+              example: 'Kateryna Povalenko'
+            phoneNumber:
+                description: 'Phone number must start with "+380" and contain exactly 9 digits after it.
+               Phone number should have between 3 and 20 digits.'
+                type: string
+                example: "+380000000005"
+            email:
+              description: 'Valid email address (3 to 20 characters)'
+              type: string
+              example: 'ivan5@example.com'
+            isFavourite:
+              description: 'Indicates if the contact is a favorite (true or false)'
+              type: boolean
+              example: true
+            contactType:
+              description: 'Type of contact. Allowed values: "work", "home", "personal"'
+              type: string
+              enum: ['work', 'home', 'personal']
+              example: 'work'
+multipart/form-data:
+        schema: 
+          type: object
+          properties: 
+            photo:
+              type: string
+              format: binary
+              description: 'Profile picture of the contact. Only one photo'
+              example: 'example.jpg'

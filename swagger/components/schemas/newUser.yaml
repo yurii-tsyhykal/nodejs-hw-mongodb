@@ -1,0 +1,26 @@
+type: object
+required:
+  - _id
+  - name
+  - email
+properties:
+  _id:
+    description: 'User’s id'
+    type: string
+    example: '66fef6664c33356ed36be923'
+  name:
+    description: "Contact's name"
+    type: string
+    example: 'Kateryna Povalenko'
+  email:
+    description: 'User’s email'
+    type: string
+    example: 'example@gmail.com'
+  createdAt:
+    description: 'The date the user was created'
+    type: string
+    example: '2024-11-10T15:02:37.089Z'
+  updatedAt:
+    description: 'The date of the last update to the user'
+    type: string
+    example: '2024-11-10T15:02:37.089Z'

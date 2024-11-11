@@ -1,0 +1,23 @@
+tags:
+  - Contacts
+summary: Delete contact by id
+operationId: deleteContact
+description: |
+  This operation allows you to delete a contact from the database by ID.
+  Once this is deleted, all of its associated data will be deleted permanently.
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: id
+    required: true
+    schema:
+      type: string
+      example: '66fef6664c33356ed36be923'
+responses:
+  '204':
+    description: 'No content, successful deletion of the contact'
+  '401':
+    $ref: ../../../components/responses/authErrors/401.yaml
+  '404':
+    $ref: ../../../components/responses/contacts/{id}/404.yaml

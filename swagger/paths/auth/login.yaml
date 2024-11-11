@@ -1,0 +1,91 @@
+tags:
+  - Auth
+summary: Login User
+operationId: loginUser
+description: 'Login a user with payload'
+security: []
+requestBody:
+  content:
+    application.json:
+      schema:
+        type: object
+        required:
+          - email
+          - password
+        properties:
+          email:
+            description: 'User’s email'
+            type: string
+            example: 'example@gmail.com'
+          password:
+            description: 'User’s password'
+            type: string
+            example: '12345qwery'
+responses:
+  '200':
+    description: 'Successful login, returns an access token in the body and sets refresh token and session ID in cookies'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: 'Successfully logged in an user!'
+            data:
+              type: object
+              required:
+                - accessToken
+              properties:
+                accessToken:
+                  type: string
+                  example: 'fjJIVhTH4cG4jgRtx9yBC0iociITxADIMg2z85xm'
+    headers:
+      Set-Cookie:
+        description: 'Sets refresh token and session ID as cookies.'
+        schema:
+          type: object
+          properties:
+            refreshToken:
+              type: string
+              description: 'refreshToken=mPOXPVqdQZbaTCa4FLODGmJNxdA4Vuj9rSquzRk2'
+            sessionId:
+              type: string
+              description: 'sessionId=j%3A%226732010f48397ce54e23d271%22'
+  '400':
+    description: 'Bad request due to invalid fields'
+    content:
+      application/json:
+        $ref: '../../components/responses/users/login/400.yaml'
+  '401':
+    description: 'Unauthorized error'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+            message:
+              type: string
+        examples:
+          userNotFound:
+            summary: 'User not found'
+            value:
+              status: 401
+              message: 'User not found'
+          uncorrectedPassword:
+            summary: 'password is not correct'
+            value:
+              status: 401
+              message: 'Unauthorized'

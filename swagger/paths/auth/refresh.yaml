@@ -1,0 +1,74 @@
+tags:
+  - Auth
+summary: Refresh User Session
+operationId: refreshUser
+description: >
+  This endpoint allows refreshing the access token using the `refreshToken` 
+  and also updates the session using the `sessionId` stored in the `httpOnly` cookies.
+  The server retrieves both the `refreshToken` and `sessionId` from the cookies, 
+  validates them, and responds with a new access token and updated session.
+security:
+  - bearerAuth: []
+responses:
+  '200':
+    description: 'Successful refresh a session'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: 'Successfully refreshed a session!'
+            data:
+              type: object
+              required:
+                - accessToken
+              properties:
+                accessToken:
+                  type: string
+                  example: 'fjJIVhTH4cG4jgRtx9yBC0iociITxADIMg2z85xm'
+    headers:
+      Set-Cookie:
+        description: 'Sets refresh token and session ID as cookies.'
+        schema:
+          type: object
+          properties:
+            refreshToken:
+              type: string
+              description: 'refreshToken=mPOXPVqdQZbaTCa4FLODGmJNxdA4Vuj9rSquzRk2'
+            sessionId:
+              type: string
+              description: 'sessionId=j%3A%226732010f48397ce54e23d271%22'
+  '401':
+    description: 'Unauthorized error'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+            message:
+              type: string
+        examples:
+          sessionNotFound:
+            summary: 'Session not found'
+            value:
+              status: 401
+              message: 'Session not found'
+          refreshTokenIsExpired:
+            summary: 'refreshToken is expired'
+            value:
+              status: 401
+              message: 'Session is expired'

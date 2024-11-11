@@ -1,0 +1,77 @@
+tags:
+  - Contacts
+summary: Create contact
+operationId: createContact
+description: >
+  This operation allows the creation of a new contact in the system with specified details, including the `name`, `phone number`, `email`, and type of contact `(work, home, personal)`. The user can also mark the contact as a favourite and upload a photo, if desired. 
+  The request requires authentication, and it can handle data in both JSON and multipart form-data formats
+security:
+  - bearerAuth: []
+requestBody:
+  content:
+    application.json:
+      $ref: '../../components/schemas/newContact.yaml'
+    multipart/form-data:
+      schema:
+        type: object
+        required:
+          - name
+          - phoneNumber
+          - contactType
+        properties:
+          name:
+            description: "Contact's name. min 3 max 20 characters"
+            type: string
+            example: 'Kateryna Povalenko'
+          phoneNumber:
+            description: "Contact's phone number"
+            type: string
+            example: '+380000000005'
+          email:
+            description: 'Contact’s email'
+            type: string
+          isFavourite:
+            description: 'A boolean field representing whether the contact is marked as a favourite. True if the contact is a favourite, otherwise false.'
+            type: boolean
+            default: false
+            example: true
+          contactType:
+            description: 'This is a field for specifying the type of contact; it is restricted to the following values: work, home, or personal'
+            type: string
+            enum: ['work', 'home', 'personal']
+            default: 'personal'
+            example: 'work'
+          photo:
+            description: 'Link to contact’s photo'
+            type: string
+            example: 'https://res.cloudinary.com/dcf1dkdyt/image/upload/v1730665462/vhf7oe7672n5lst6vf4v.webp'
+responses:
+  '201':
+    description: Create a contact
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: 'Successfully created a contact!'
+            data:
+              type: object
+              $ref: ../../components/schemas/contact.yaml
+  '401':
+    $ref: ../../components/responses/authErrors/401.yaml
+  '400':
+    description: 'Bad request due to invalid fields'
+    content:
+      application/json:
+        $ref: ../../components/responses/contacts/{id}/400patch.yaml
+      multipart/form-data:
+        $ref: ../../components/responses/contacts/{id}/400patch.yaml

@@ -1,0 +1,52 @@
+schema:
+  type: object
+  required:
+    - status
+    - message
+  properties:
+    status:
+      type: integer
+      example: 400
+    message:
+      type: string
+examples:
+  validEmail:
+    description: 'Email field must be a valid email'
+    value:
+      status: 400
+      message: '\"email\" must be a valid email'
+  maxLengthEmail:
+    description: '\Email length must be less than or equal to 20 characters long'
+    value:
+      status: 400
+      message: '\"email\" length must be less than or equal to 20 characters long'
+  emptyEmail:
+    description: 'Email is not allowed to be empty'
+    value:
+      status: 400
+      message: '\"email\" is not allowed to be empty'
+  requiredEmail:
+    description: 'Email is required'
+    value:
+      status: 400
+      message: '\"email\" is required'
+  minLengthPassword:
+    description: 'Password should have at least 3 characters'
+    value:
+      status: 400
+      message: 'Password should have at least 3 characters'
+  maxLengthPassword:
+    description: 'Password should have at most 20 characters'
+    value:
+      status: 400
+      message: 'Password should have at most 20 characters'
+  emptyPasswordField:
+    description: 'This field is not allowed to be empty'
+    value:
+      status: 400
+      message: '\"password\" is not allowed to be empty'
+  requiredPassword:
+    description: 'Password field is required'
+    value:
+      status: 400
+      message: '\"password\" is required'

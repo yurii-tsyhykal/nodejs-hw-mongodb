@@ -1,0 +1,89 @@
+schema:
+  type: object
+  required:
+    - status
+    - message
+  properties:
+    status:
+      type: integer
+      example: 400
+    message:
+      type: string
+examples:
+  notAllowedFields:
+    description: 'Invalid fields included in request'
+    value:
+      status: 400
+      message: '\"_id\" is not allowed-\"userId\" is not allowed-\"createdAt\" is not allowed'
+  minLengthName:
+    description: 'Username should have at least 3 characters'
+    value:
+      status: 400
+      message: 'Username should have at least 3 characters'
+  maxLengthName:
+    description: 'Username should have at most 20 characters'
+    value:
+      status: 400
+      message: 'Username should have at most 20 characters'
+  emptyNameField:
+    description: 'This field is not allowed to be empty'
+    value:
+      status: 400
+      message: '\"name\" is not allowed to be empty'
+  phoneString:
+    description: 'Phone number should be a string'
+    value:
+      status: 400
+      message: 'Phone number should be a string'
+  invalidPhoneNumber:
+    description: 'Phone number must be a valid'
+    value:
+      status: 400
+      message: 'Phone number must start with +380 and contain exactly 9 digits after it'
+  maxPhoneNumberLength:
+    description: 'Phone number must be a valid'
+    value:
+      status: 400
+      message: 'Phone number must start with +380 and contain exactly 9 digits after it-Phone number should have at most 20 digits'
+  emptyPhoneNumber:
+    description: 'Phone number is not allowed to be empty'
+    value:
+      status: 400
+      message: '\"phoneNumber\" is not allowed to be empty'
+  validEmail:
+    description: 'Email field must be a valid email'
+    value:
+      status: 400
+      message: '\"email\" must be a valid email'
+  maxLengthEmail:
+    description: '\Email length must be less than or equal to 20 characters long'
+    value:
+      status: 400
+      message: '\"email\" length must be less than or equal to 20 characters long'
+  emptyEmail:
+    description: 'Email is not allowed to be empty'
+    value:
+      status: 400
+      message: '\"email\" is not allowed to be empty'
+  isFavouriteValid:
+    description: 'isFavourite must be a boolean'
+  validContactType:
+    description: 'Contact Type must be one of (work, home, personal)'
+    value:
+      status: 400
+      message: '\"contactType\" must be one of [work, home, personal]'
+  minLengthContcatType:
+    description: 'ContactType length must be at least 3 characters long'
+    value:
+      status: 400
+      message: '\"contactType\" must be one of [work, home, personal]-\"contactType\" length must be at least 3 characters long'
+  maxLengthContactType:
+    description: 'ContactType length must be less than or equal to 20 characters long'
+    value:
+      status: 400
+      message: '\"contactType\" must be one of [work, home, personal]-\"contactType\" length must be less than or equal to 20 characters long'
+  emptyContactType:
+    description: 'ContactType is not allowed to be empty'
+    value:
+      status: 400
+      message: '\"contactType\" must be one of [work, home, personal]-\"contactType\" is not allowed to be empty'

@@ -1,0 +1,36 @@
+tags:
+  - Auth
+summary: Logout User
+operationId: logoutUser
+description: >
+  This operation logs out the user by clearing their session and refresh token cookies.
+  It invalidates the user session and sends a `204 No Content` response to indicate successful logout.
+security: []
+responses:
+  '204':
+    description: Successfully logged out, no content returned.
+  '401':
+    description: 'Unauthorized error'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+            message:
+              type: string
+        examples:
+          sessionNotFound:
+            summary: 'Session not found'
+            value:
+              status: 401
+              message: 'Session not found'
+          accessTokenExpired:
+            summary: 'Access token expired'
+            value:
+              status: 401
+              message: 'Access token expired'

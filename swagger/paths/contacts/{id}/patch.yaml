@@ -1,0 +1,38 @@
+tags:
+  - Contacts
+summary: Update contact by id
+operationId: updateContactById
+description: 'This operation allows updating the information of a contact in the system using its ID.
+You can modify certain fields such as name, phone number, email address, isFavourite, contactType, photo.'
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: id
+    required: true
+    schema:
+      type: string
+      example: '66fef6664c33356ed36be923'
+requestBody:
+  description: "Request body for updating a contact's information" 
+  content:
+    $ref: ../../../components/schemas/patchReqBody.yaml
+responses:
+  '200':
+    description: Update contact by id
+    content:
+      application/json:
+        $ref: '../../../components/responses/contacts/{id}/200patch.yaml'
+      multipart/form-data:
+        $ref: '../../../components/responses/contacts/{id}/200patch.yaml'             
+  '404':
+    $ref: ../../../components/responses/contacts/{id}/404.yaml
+  '400':
+    description: "Bad request due to invalid fields"
+    content: 
+      application/json:
+        $ref: '../../../components/responses/contacts/{id}/400patch.yaml'
+      multipart/form-data:
+        $ref: '../../../components/responses/contacts/{id}/400patch.yaml'
+  '401':
+    $ref: ../../../components/responses/authErrors/401.yaml

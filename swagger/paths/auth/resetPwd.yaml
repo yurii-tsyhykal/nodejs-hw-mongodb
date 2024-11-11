@@ -1,0 +1,136 @@
+tags:
+  - Auth
+summary: Reset User password
+operationId: resetPwd
+description: >
+  This operation allows the user to reset their password using a `token` received via email.
+  The email contains a link with a `token` that can be used to authenticate the password reset process.
+security: []
+requestBody:
+  required: true
+  content:
+    application.json:
+      schema:
+        type: object
+        required:
+          - token
+          - password
+        properties:
+          token:
+            description: 'User’s email to send the reset email'
+            type: string
+            example: 'example@gmail.com'
+          password:
+            description: 'User’s new password'
+            type: string
+            example: '12345qwerty'
+responses:
+  '200':
+    description: 'Password was successfully reset!'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: 'Password was successfully reset!'
+  '400':
+    description: 'Bad request due to invalid field'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+              example: 400
+            message:
+              type: string
+        examples:
+          minLengthPassword:
+            description: 'Password should have at least 3 characters'
+            value:
+              status: 400
+              message: 'Password should have at least 3 characters'
+          maxLengthPassword:
+            description: 'Password should have at most 20 characters'
+            value:
+              status: 400
+              message: 'Password should have at most 20 characters'
+          emptyPasswordField:
+            description: 'This field is not allowed to be empty'
+            value:
+              status: 400
+              message: '\"password\" is not allowed to be empty'
+          requiredPassword:
+            description: 'Password field is required'
+            value:
+              status: 400
+              message: '\"password\" is required'
+          emptyToken:
+            description: '\Token field is not allowed to be empty'
+            value:
+              status: 400
+              message: '\"token\" is not allowed to be empty'
+          requiredToken:
+            description: '\Token field is required'
+            value:
+              status: 400
+              message: '\"token\" is required'
+  '401':
+    description: 'Unauthorized'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+              example: 401
+            message:
+              type: string
+        examples:
+          expiredToken:
+            description: 'jwt expired'
+            value:
+              status: 401
+              message: 'jwt expired'
+          malformedToken:
+            description: 'jwt malformed'
+            value:
+              status: 401
+              message: 'jwt malformed'
+          invalidToken:
+            description: 'invalid signature'
+            value:
+              status: 401
+              message: 'invalid signature'
+  '404':
+    description: 'User not found'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+              example: 404
+            message:
+              type: string
+              example: 'User not found'
