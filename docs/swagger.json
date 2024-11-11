@@ -1,1 +1,2216 @@
-{}
+{
+  "openapi": "3.1.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Contacts app",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "description": "This is documentation of contacts app **Note:** A `404 Route Not Found` error will be returned if the requested route does not exist.\n This response is handled at the server level and applies to all undefined routes.\n"
+  },
+  "servers": [
+    {
+      "url": "https://nodejs-hw-mongodb-kj7q.onrender.com"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Contacts",
+      "description": "Operations about contacts."
+    },
+    {
+      "name": "Auth",
+      "description": "Auth operations."
+    }
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Register User",
+        "operationId": "registerUser",
+        "description": "Register a new user with payload",
+        "security": [],
+        "requestBody": {
+          "content": {
+            "application.json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "name": {
+                    "description": "Username",
+                    "type": "string",
+                    "example": "Kateryna Povalenko"
+                  },
+                  "email": {
+                    "description": "User’s email",
+                    "type": "string",
+                    "example": "example@gmail.com"
+                  },
+                  "password": {
+                    "description": "User’s password",
+                    "type": "string",
+                    "example": "12345qwery"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Registered a user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully registered a user!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/newUser"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request due to invalid fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "minLengthName": {
+                    "description": "Username should have at least 3 characters",
+                    "value": {
+                      "status": 400,
+                      "message": "Username should have at least 3 characters"
+                    }
+                  },
+                  "maxLengthName": {
+                    "description": "Username should have at most 20 characters",
+                    "value": {
+                      "status": 400,
+                      "message": "Username should have at most 20 characters"
+                    }
+                  },
+                  "emptyNameField": {
+                    "description": "This field is not allowed to be empty",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"name\\\" is not allowed to be empty"
+                    }
+                  },
+                  "requiredName": {
+                    "description": "Name field is required",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"name\\\" is required"
+                    }
+                  },
+                  "validEmail": {
+                    "description": "Email field must be a valid email",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"email\\\" must be a valid email"
+                    }
+                  },
+                  "maxLengthEmail": {
+                    "description": "\\Email length must be less than or equal to 20 characters long",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"email\\\" length must be less than or equal to 20 characters long"
+                    }
+                  },
+                  "emptyEmail": {
+                    "description": "Email is not allowed to be empty",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"email\\\" is not allowed to be empty"
+                    }
+                  },
+                  "requiredEmail": {
+                    "description": "Email is required",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"email\\\" is required"
+                    }
+                  },
+                  "minLengthPassword": {
+                    "description": "Password should have at least 3 characters",
+                    "value": {
+                      "status": 400,
+                      "message": "Password should have at least 3 characters"
+                    }
+                  },
+                  "maxLengthPassword": {
+                    "description": "Password should have at most 20 characters",
+                    "value": {
+                      "status": 400,
+                      "message": "Password should have at most 20 characters"
+                    }
+                  },
+                  "emptyPasswordField": {
+                    "description": "This field is not allowed to be empty",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"password\\\" is not allowed to be empty"
+                    }
+                  },
+                  "requiredPassword": {
+                    "description": "Password field is required",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"password\\\" is required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Email is already in use",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 409
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Email in use"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Login User",
+        "operationId": "loginUser",
+        "description": "Login a user with payload",
+        "security": [],
+        "requestBody": {
+          "content": {
+            "application.json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "description": "User’s email",
+                    "type": "string",
+                    "example": "example@gmail.com"
+                  },
+                  "password": {
+                    "description": "User’s password",
+                    "type": "string",
+                    "example": "12345qwery"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful login, returns an access token in the body and sets refresh token and session ID in cookies",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully logged in an user!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "accessToken"
+                      ],
+                      "properties": {
+                        "accessToken": {
+                          "type": "string",
+                          "example": "fjJIVhTH4cG4jgRtx9yBC0iociITxADIMg2z85xm"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {
+              "Set-Cookie": {
+                "description": "Sets refresh token and session ID as cookies.",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "refreshToken": {
+                      "type": "string",
+                      "description": "refreshToken=mPOXPVqdQZbaTCa4FLODGmJNxdA4Vuj9rSquzRk2"
+                    },
+                    "sessionId": {
+                      "type": "string",
+                      "description": "sessionId=j%3A%226732010f48397ce54e23d271%22"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request due to invalid fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "validEmail": {
+                    "description": "Email field must be a valid email",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"email\\\" must be a valid email"
+                    }
+                  },
+                  "maxLengthEmail": {
+                    "description": "\\Email length must be less than or equal to 20 characters long",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"email\\\" length must be less than or equal to 20 characters long"
+                    }
+                  },
+                  "emptyEmail": {
+                    "description": "Email is not allowed to be empty",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"email\\\" is not allowed to be empty"
+                    }
+                  },
+                  "requiredEmail": {
+                    "description": "Email is required",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"email\\\" is required"
+                    }
+                  },
+                  "minLengthPassword": {
+                    "description": "Password should have at least 3 characters",
+                    "value": {
+                      "status": 400,
+                      "message": "Password should have at least 3 characters"
+                    }
+                  },
+                  "maxLengthPassword": {
+                    "description": "Password should have at most 20 characters",
+                    "value": {
+                      "status": 400,
+                      "message": "Password should have at most 20 characters"
+                    }
+                  },
+                  "emptyPasswordField": {
+                    "description": "This field is not allowed to be empty",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"password\\\" is not allowed to be empty"
+                    }
+                  },
+                  "requiredPassword": {
+                    "description": "Password field is required",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"password\\\" is required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "userNotFound": {
+                    "summary": "User not found",
+                    "value": {
+                      "status": 401,
+                      "message": "User not found"
+                    }
+                  },
+                  "uncorrectedPassword": {
+                    "summary": "password is not correct",
+                    "value": {
+                      "status": 401,
+                      "message": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Refresh User Session",
+        "operationId": "refreshUser",
+        "description": "This endpoint allows refreshing the access token using the `refreshToken`  and also updates the session using the `sessionId` stored in the `httpOnly` cookies. The server retrieves both the `refreshToken` and `sessionId` from the cookies,  validates them, and responds with a new access token and updated session.\n",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful refresh a session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully refreshed a session!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "accessToken"
+                      ],
+                      "properties": {
+                        "accessToken": {
+                          "type": "string",
+                          "example": "fjJIVhTH4cG4jgRtx9yBC0iociITxADIMg2z85xm"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {
+              "Set-Cookie": {
+                "description": "Sets refresh token and session ID as cookies.",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "refreshToken": {
+                      "type": "string",
+                      "description": "refreshToken=mPOXPVqdQZbaTCa4FLODGmJNxdA4Vuj9rSquzRk2"
+                    },
+                    "sessionId": {
+                      "type": "string",
+                      "description": "sessionId=j%3A%226732010f48397ce54e23d271%22"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "sessionNotFound": {
+                    "summary": "Session not found",
+                    "value": {
+                      "status": 401,
+                      "message": "Session not found"
+                    }
+                  },
+                  "refreshTokenIsExpired": {
+                    "summary": "refreshToken is expired",
+                    "value": {
+                      "status": 401,
+                      "message": "Session is expired"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Logout User",
+        "operationId": "logoutUser",
+        "description": "This operation logs out the user by clearing their session and refresh token cookies. It invalidates the user session and sends a `204 No Content` response to indicate successful logout.\n",
+        "security": [],
+        "responses": {
+          "204": {
+            "description": "Successfully logged out, no content returned."
+          },
+          "401": {
+            "description": "Unauthorized error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "sessionNotFound": {
+                    "summary": "Session not found",
+                    "value": {
+                      "status": 401,
+                      "message": "Session not found"
+                    }
+                  },
+                  "accessTokenExpired": {
+                    "summary": "Access token expired",
+                    "value": {
+                      "status": 401,
+                      "message": "Access token expired"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/send-reset-email": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Send reset User password",
+        "operationId": "sendResetEmail",
+        "description": "This operation sends a password reset email to the user based on the provided email address. The email contains a link to reset the user's password.\n",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application.json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email"
+                ],
+                "properties": {
+                  "email": {
+                    "description": "User’s email to send the reset email",
+                    "type": "string",
+                    "example": "example@gmail.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Reset password email has been successfully sent.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Reset password email has been successfully sent."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request due to invalid field",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "validEmail": {
+                    "description": "Email field must be a valid email",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"email\\\" must be a valid email"
+                    }
+                  },
+                  "emptyEmail": {
+                    "description": "Email is not allowed to be empty",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"email\\\" is not allowed to be empty"
+                    }
+                  },
+                  "requiredEmail": {
+                    "description": "Email is required",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"email\\\" is required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Failed to send the email, please try again later."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/reset-pwd": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Reset User password",
+        "operationId": "resetPwd",
+        "description": "This operation allows the user to reset their password using a `token` received via email. The email contains a link with a `token` that can be used to authenticate the password reset process.\n",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application.json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "token",
+                  "password"
+                ],
+                "properties": {
+                  "token": {
+                    "description": "User’s email to send the reset email",
+                    "type": "string",
+                    "example": "example@gmail.com"
+                  },
+                  "password": {
+                    "description": "User’s new password",
+                    "type": "string",
+                    "example": "12345qwerty"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password was successfully reset!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Password was successfully reset!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request due to invalid field",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "minLengthPassword": {
+                    "description": "Password should have at least 3 characters",
+                    "value": {
+                      "status": 400,
+                      "message": "Password should have at least 3 characters"
+                    }
+                  },
+                  "maxLengthPassword": {
+                    "description": "Password should have at most 20 characters",
+                    "value": {
+                      "status": 400,
+                      "message": "Password should have at most 20 characters"
+                    }
+                  },
+                  "emptyPasswordField": {
+                    "description": "This field is not allowed to be empty",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"password\\\" is not allowed to be empty"
+                    }
+                  },
+                  "requiredPassword": {
+                    "description": "Password field is required",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"password\\\" is required"
+                    }
+                  },
+                  "emptyToken": {
+                    "description": "\\Token field is not allowed to be empty",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"token\\\" is not allowed to be empty"
+                    }
+                  },
+                  "requiredToken": {
+                    "description": "\\Token field is required",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"token\\\" is required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "expiredToken": {
+                    "description": "jwt expired",
+                    "value": {
+                      "status": 401,
+                      "message": "jwt expired"
+                    }
+                  },
+                  "malformedToken": {
+                    "description": "jwt malformed",
+                    "value": {
+                      "status": 401,
+                      "message": "jwt malformed"
+                    }
+                  },
+                  "invalidToken": {
+                    "description": "invalid signature",
+                    "value": {
+                      "status": 401,
+                      "message": "invalid signature"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contacts": {
+      "get": {
+        "tags": [
+          "Contacts"
+        ],
+        "summary": "Get list of contacts",
+        "operationId": "getContacts",
+        "description": "Retrieves a complete list of contacts from the database, including  `name`, `email`, `phone number`, `contactType`, `userId` and other(look in example).  This endpoint supports optional query parameters for `filtering`, `sorting`, and `pagination`.\n",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "example": 2
+            }
+          },
+          {
+            "in": "query",
+            "name": "perPage",
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "example": 8
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "description": "You can sort contacts by name. If the 'sortBy' field exists in the query parameters, contacts will be sorted by '_id' by default.",
+            "schema": {
+              "type": "string",
+              "default": "_id",
+              "example": "?sortBy=Kateryna Povalenko"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "default": "asc",
+              "example": "desc"
+            }
+          },
+          {
+            "in": "query",
+            "name": "contactType",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "work",
+                "home",
+                "personal"
+              ],
+              "default": "personal",
+              "example": "work"
+            }
+          },
+          {
+            "in": "query",
+            "name": "isFavourite",
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "example": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully found contacts!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully found contacts!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "data",
+                        "page",
+                        "perPage",
+                        "totalItems",
+                        "totalPages",
+                        "hasPreviousPage",
+                        "hasNextPage"
+                      ],
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/contact"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Contacts"
+        ],
+        "summary": "Create contact",
+        "operationId": "createContact",
+        "description": "This operation allows the creation of a new contact in the system with specified details, including the `name`, `phone number`, `email`, and type of contact `(work, home, personal)`. The user can also mark the contact as a favourite and upload a photo, if desired.  The request requires authentication, and it can handle data in both JSON and multipart form-data formats\n",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application.json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "phoneNumber",
+                  "contactType"
+                ],
+                "properties": {
+                  "name": {
+                    "description": "Contact's name. Contact's name. min 3 max 20 characters",
+                    "type": "string",
+                    "example": "Kateryna Povalenko"
+                  },
+                  "phoneNumber": {
+                    "description": "Contact's phone number",
+                    "type": "string",
+                    "example": "+380000000005"
+                  },
+                  "email": {
+                    "description": "Contact’s email",
+                    "type": "string"
+                  },
+                  "isFavourite": {
+                    "description": "A boolean field representing whether the contact is marked as a favourite. True if the contact is a favourite, otherwise false.",
+                    "type": "boolean",
+                    "default": false,
+                    "example": true
+                  },
+                  "contactType": {
+                    "description": "\"This is a field for specifying the type of contact; it is restricted to the following values: work, home, or personal",
+                    "type": "string",
+                    "enum": [
+                      "work",
+                      "home",
+                      "personal"
+                    ],
+                    "default": "personal",
+                    "example": "work"
+                  }
+                }
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "phoneNumber",
+                  "contactType"
+                ],
+                "properties": {
+                  "name": {
+                    "description": "Contact's name. min 3 max 20 characters",
+                    "type": "string",
+                    "example": "Kateryna Povalenko"
+                  },
+                  "phoneNumber": {
+                    "description": "Contact's phone number",
+                    "type": "string",
+                    "example": "+380000000005"
+                  },
+                  "email": {
+                    "description": "Contact’s email",
+                    "type": "string"
+                  },
+                  "isFavourite": {
+                    "description": "A boolean field representing whether the contact is marked as a favourite. True if the contact is a favourite, otherwise false.",
+                    "type": "boolean",
+                    "default": false,
+                    "example": true
+                  },
+                  "contactType": {
+                    "description": "This is a field for specifying the type of contact; it is restricted to the following values: work, home, or personal",
+                    "type": "string",
+                    "enum": [
+                      "work",
+                      "home",
+                      "personal"
+                    ],
+                    "default": "personal",
+                    "example": "work"
+                  },
+                  "photo": {
+                    "description": "Link to contact’s photo",
+                    "type": "string",
+                    "example": "https://res.cloudinary.com/dcf1dkdyt/image/upload/v1730665462/vhf7oe7672n5lst6vf4v.webp"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a contact",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully created a contact!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/contact"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request due to invalid fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "notAllowedFields": {
+                    "description": "Invalid fields included in request",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"_id\\\" is not allowed-\\\"userId\\\" is not allowed-\\\"createdAt\\\" is not allowed"
+                    }
+                  },
+                  "minLengthName": {
+                    "description": "Username should have at least 3 characters",
+                    "value": {
+                      "status": 400,
+                      "message": "Username should have at least 3 characters"
+                    }
+                  },
+                  "maxLengthName": {
+                    "description": "Username should have at most 20 characters",
+                    "value": {
+                      "status": 400,
+                      "message": "Username should have at most 20 characters"
+                    }
+                  },
+                  "emptyNameField": {
+                    "description": "This field is not allowed to be empty",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"name\\\" is not allowed to be empty"
+                    }
+                  },
+                  "phoneString": {
+                    "description": "Phone number should be a string",
+                    "value": {
+                      "status": 400,
+                      "message": "Phone number should be a string"
+                    }
+                  },
+                  "invalidPhoneNumber": {
+                    "description": "Phone number must be a valid",
+                    "value": {
+                      "status": 400,
+                      "message": "Phone number must start with +380 and contain exactly 9 digits after it"
+                    }
+                  },
+                  "maxPhoneNumberLength": {
+                    "description": "Phone number must be a valid",
+                    "value": {
+                      "status": 400,
+                      "message": "Phone number must start with +380 and contain exactly 9 digits after it-Phone number should have at most 20 digits"
+                    }
+                  },
+                  "emptyPhoneNumber": {
+                    "description": "Phone number is not allowed to be empty",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"phoneNumber\\\" is not allowed to be empty"
+                    }
+                  },
+                  "validEmail": {
+                    "description": "Email field must be a valid email",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"email\\\" must be a valid email"
+                    }
+                  },
+                  "maxLengthEmail": {
+                    "description": "\\Email length must be less than or equal to 20 characters long",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"email\\\" length must be less than or equal to 20 characters long"
+                    }
+                  },
+                  "emptyEmail": {
+                    "description": "Email is not allowed to be empty",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"email\\\" is not allowed to be empty"
+                    }
+                  },
+                  "isFavouriteValid": {
+                    "description": "isFavourite must be a boolean"
+                  },
+                  "validContactType": {
+                    "description": "Contact Type must be one of (work, home, personal)",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"contactType\\\" must be one of [work, home, personal]"
+                    }
+                  },
+                  "minLengthContcatType": {
+                    "description": "ContactType length must be at least 3 characters long",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"contactType\\\" must be one of [work, home, personal]-\\\"contactType\\\" length must be at least 3 characters long"
+                    }
+                  },
+                  "maxLengthContactType": {
+                    "description": "ContactType length must be less than or equal to 20 characters long",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"contactType\\\" must be one of [work, home, personal]-\\\"contactType\\\" length must be less than or equal to 20 characters long"
+                    }
+                  },
+                  "emptyContactType": {
+                    "description": "ContactType is not allowed to be empty",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"contactType\\\" must be one of [work, home, personal]-\\\"contactType\\\" is not allowed to be empty"
+                    }
+                  }
+                }
+              },
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "notAllowedFields": {
+                    "description": "Invalid fields included in request",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"_id\\\" is not allowed-\\\"userId\\\" is not allowed-\\\"createdAt\\\" is not allowed"
+                    }
+                  },
+                  "minLengthName": {
+                    "description": "Username should have at least 3 characters",
+                    "value": {
+                      "status": 400,
+                      "message": "Username should have at least 3 characters"
+                    }
+                  },
+                  "maxLengthName": {
+                    "description": "Username should have at most 20 characters",
+                    "value": {
+                      "status": 400,
+                      "message": "Username should have at most 20 characters"
+                    }
+                  },
+                  "emptyNameField": {
+                    "description": "This field is not allowed to be empty",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"name\\\" is not allowed to be empty"
+                    }
+                  },
+                  "phoneString": {
+                    "description": "Phone number should be a string",
+                    "value": {
+                      "status": 400,
+                      "message": "Phone number should be a string"
+                    }
+                  },
+                  "invalidPhoneNumber": {
+                    "description": "Phone number must be a valid",
+                    "value": {
+                      "status": 400,
+                      "message": "Phone number must start with +380 and contain exactly 9 digits after it"
+                    }
+                  },
+                  "maxPhoneNumberLength": {
+                    "description": "Phone number must be a valid",
+                    "value": {
+                      "status": 400,
+                      "message": "Phone number must start with +380 and contain exactly 9 digits after it-Phone number should have at most 20 digits"
+                    }
+                  },
+                  "emptyPhoneNumber": {
+                    "description": "Phone number is not allowed to be empty",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"phoneNumber\\\" is not allowed to be empty"
+                    }
+                  },
+                  "validEmail": {
+                    "description": "Email field must be a valid email",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"email\\\" must be a valid email"
+                    }
+                  },
+                  "maxLengthEmail": {
+                    "description": "\\Email length must be less than or equal to 20 characters long",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"email\\\" length must be less than or equal to 20 characters long"
+                    }
+                  },
+                  "emptyEmail": {
+                    "description": "Email is not allowed to be empty",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"email\\\" is not allowed to be empty"
+                    }
+                  },
+                  "isFavouriteValid": {
+                    "description": "isFavourite must be a boolean"
+                  },
+                  "validContactType": {
+                    "description": "Contact Type must be one of (work, home, personal)",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"contactType\\\" must be one of [work, home, personal]"
+                    }
+                  },
+                  "minLengthContcatType": {
+                    "description": "ContactType length must be at least 3 characters long",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"contactType\\\" must be one of [work, home, personal]-\\\"contactType\\\" length must be at least 3 characters long"
+                    }
+                  },
+                  "maxLengthContactType": {
+                    "description": "ContactType length must be less than or equal to 20 characters long",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"contactType\\\" must be one of [work, home, personal]-\\\"contactType\\\" length must be less than or equal to 20 characters long"
+                    }
+                  },
+                  "emptyContactType": {
+                    "description": "ContactType is not allowed to be empty",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"contactType\\\" must be one of [work, home, personal]-\\\"contactType\\\" is not allowed to be empty"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    },
+    "/contacts/{id}": {
+      "get": {
+        "tags": [
+          "Contacts"
+        ],
+        "summary": "Get contact by id",
+        "operationId": "getContactById",
+        "description": "This endpoint retrieves a specific contact's details by its unique id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "66fef6664c33356ed36be923"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get contacts by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully found contact with id 66fef6664c33356ed36be923!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/contact"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404-2"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Contacts"
+        ],
+        "summary": "Update contact by id",
+        "operationId": "updateContactById",
+        "description": "This operation allows updating the information of a contact in the system using its ID. You can modify certain fields such as name, phone number, email address, isFavourite, contactType, photo.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "66fef6664c33356ed36be923"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Request body for updating a contact's information",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "Username should be between 3 and 20 characters long",
+                    "type": "string",
+                    "example": "Kateryna Povalenko"
+                  },
+                  "phoneNumber": {
+                    "description": "Phone number must start with \"+380\" and contain exactly 9 digits after it. Phone number should have between 3 and 20 digits.",
+                    "type": "string",
+                    "example": "+380000000005"
+                  },
+                  "email": {
+                    "description": "Valid email address (3 to 20 characters)",
+                    "type": "string",
+                    "example": "ivan5@example.com"
+                  },
+                  "isFavourite": {
+                    "description": "Indicates if the contact is a favorite (true or false)",
+                    "type": "boolean",
+                    "example": true
+                  },
+                  "contactType": {
+                    "description": "Type of contact. Allowed values: \"work\", \"home\", \"personal\"",
+                    "type": "string",
+                    "enum": [
+                      "work",
+                      "home",
+                      "personal"
+                    ],
+                    "example": "work"
+                  }
+                }
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "photo": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Profile picture of the contact. Only one photo",
+                    "example": "example.jpg"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update contact by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully patched a contact!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/contact"
+                    }
+                  }
+                }
+              },
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully patched a contact!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/contact"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request due to invalid fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "notAllowedFields": {
+                    "description": "Invalid fields included in request",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"_id\\\" is not allowed-\\\"userId\\\" is not allowed-\\\"createdAt\\\" is not allowed"
+                    }
+                  },
+                  "minLengthName": {
+                    "description": "Username should have at least 3 characters",
+                    "value": {
+                      "status": 400,
+                      "message": "Username should have at least 3 characters"
+                    }
+                  },
+                  "maxLengthName": {
+                    "description": "Username should have at most 20 characters",
+                    "value": {
+                      "status": 400,
+                      "message": "Username should have at most 20 characters"
+                    }
+                  },
+                  "emptyNameField": {
+                    "description": "This field is not allowed to be empty",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"name\\\" is not allowed to be empty"
+                    }
+                  },
+                  "phoneString": {
+                    "description": "Phone number should be a string",
+                    "value": {
+                      "status": 400,
+                      "message": "Phone number should be a string"
+                    }
+                  },
+                  "invalidPhoneNumber": {
+                    "description": "Phone number must be a valid",
+                    "value": {
+                      "status": 400,
+                      "message": "Phone number must start with +380 and contain exactly 9 digits after it"
+                    }
+                  },
+                  "maxPhoneNumberLength": {
+                    "description": "Phone number must be a valid",
+                    "value": {
+                      "status": 400,
+                      "message": "Phone number must start with +380 and contain exactly 9 digits after it-Phone number should have at most 20 digits"
+                    }
+                  },
+                  "emptyPhoneNumber": {
+                    "description": "Phone number is not allowed to be empty",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"phoneNumber\\\" is not allowed to be empty"
+                    }
+                  },
+                  "validEmail": {
+                    "description": "Email field must be a valid email",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"email\\\" must be a valid email"
+                    }
+                  },
+                  "maxLengthEmail": {
+                    "description": "\\Email length must be less than or equal to 20 characters long",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"email\\\" length must be less than or equal to 20 characters long"
+                    }
+                  },
+                  "emptyEmail": {
+                    "description": "Email is not allowed to be empty",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"email\\\" is not allowed to be empty"
+                    }
+                  },
+                  "isFavouriteValid": {
+                    "description": "isFavourite must be a boolean"
+                  },
+                  "validContactType": {
+                    "description": "Contact Type must be one of (work, home, personal)",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"contactType\\\" must be one of [work, home, personal]"
+                    }
+                  },
+                  "minLengthContcatType": {
+                    "description": "ContactType length must be at least 3 characters long",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"contactType\\\" must be one of [work, home, personal]-\\\"contactType\\\" length must be at least 3 characters long"
+                    }
+                  },
+                  "maxLengthContactType": {
+                    "description": "ContactType length must be less than or equal to 20 characters long",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"contactType\\\" must be one of [work, home, personal]-\\\"contactType\\\" length must be less than or equal to 20 characters long"
+                    }
+                  },
+                  "emptyContactType": {
+                    "description": "ContactType is not allowed to be empty",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"contactType\\\" must be one of [work, home, personal]-\\\"contactType\\\" is not allowed to be empty"
+                    }
+                  }
+                }
+              },
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "notAllowedFields": {
+                    "description": "Invalid fields included in request",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"_id\\\" is not allowed-\\\"userId\\\" is not allowed-\\\"createdAt\\\" is not allowed"
+                    }
+                  },
+                  "minLengthName": {
+                    "description": "Username should have at least 3 characters",
+                    "value": {
+                      "status": 400,
+                      "message": "Username should have at least 3 characters"
+                    }
+                  },
+                  "maxLengthName": {
+                    "description": "Username should have at most 20 characters",
+                    "value": {
+                      "status": 400,
+                      "message": "Username should have at most 20 characters"
+                    }
+                  },
+                  "emptyNameField": {
+                    "description": "This field is not allowed to be empty",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"name\\\" is not allowed to be empty"
+                    }
+                  },
+                  "phoneString": {
+                    "description": "Phone number should be a string",
+                    "value": {
+                      "status": 400,
+                      "message": "Phone number should be a string"
+                    }
+                  },
+                  "invalidPhoneNumber": {
+                    "description": "Phone number must be a valid",
+                    "value": {
+                      "status": 400,
+                      "message": "Phone number must start with +380 and contain exactly 9 digits after it"
+                    }
+                  },
+                  "maxPhoneNumberLength": {
+                    "description": "Phone number must be a valid",
+                    "value": {
+                      "status": 400,
+                      "message": "Phone number must start with +380 and contain exactly 9 digits after it-Phone number should have at most 20 digits"
+                    }
+                  },
+                  "emptyPhoneNumber": {
+                    "description": "Phone number is not allowed to be empty",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"phoneNumber\\\" is not allowed to be empty"
+                    }
+                  },
+                  "validEmail": {
+                    "description": "Email field must be a valid email",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"email\\\" must be a valid email"
+                    }
+                  },
+                  "maxLengthEmail": {
+                    "description": "\\Email length must be less than or equal to 20 characters long",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"email\\\" length must be less than or equal to 20 characters long"
+                    }
+                  },
+                  "emptyEmail": {
+                    "description": "Email is not allowed to be empty",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"email\\\" is not allowed to be empty"
+                    }
+                  },
+                  "isFavouriteValid": {
+                    "description": "isFavourite must be a boolean"
+                  },
+                  "validContactType": {
+                    "description": "Contact Type must be one of (work, home, personal)",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"contactType\\\" must be one of [work, home, personal]"
+                    }
+                  },
+                  "minLengthContcatType": {
+                    "description": "ContactType length must be at least 3 characters long",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"contactType\\\" must be one of [work, home, personal]-\\\"contactType\\\" length must be at least 3 characters long"
+                    }
+                  },
+                  "maxLengthContactType": {
+                    "description": "ContactType length must be less than or equal to 20 characters long",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"contactType\\\" must be one of [work, home, personal]-\\\"contactType\\\" length must be less than or equal to 20 characters long"
+                    }
+                  },
+                  "emptyContactType": {
+                    "description": "ContactType is not allowed to be empty",
+                    "value": {
+                      "status": 400,
+                      "message": "\\\"contactType\\\" must be one of [work, home, personal]-\\\"contactType\\\" is not allowed to be empty"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404-2"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Contacts"
+        ],
+        "summary": "Delete contact by id",
+        "operationId": "deleteContact",
+        "description": "This operation allows you to delete a contact from the database by ID.\nOnce this is deleted, all of its associated data will be deleted permanently.\n",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "66fef6664c33356ed36be923"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content, successful deletion of the contact"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404-2"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "newUser": {
+        "type": "object",
+        "required": [
+          "_id",
+          "name",
+          "email"
+        ],
+        "properties": {
+          "_id": {
+            "description": "User’s id",
+            "type": "string",
+            "example": "66fef6664c33356ed36be923"
+          },
+          "name": {
+            "description": "Contact's name",
+            "type": "string",
+            "example": "Kateryna Povalenko"
+          },
+          "email": {
+            "description": "User’s email",
+            "type": "string",
+            "example": "example@gmail.com"
+          },
+          "createdAt": {
+            "description": "The date the user was created",
+            "type": "string",
+            "example": "2024-11-10T15:02:37.089Z"
+          },
+          "updatedAt": {
+            "description": "The date of the last update to the user",
+            "type": "string",
+            "example": "2024-11-10T15:02:37.089Z"
+          }
+        }
+      },
+      "contact": {
+        "type": "object",
+        "required": [
+          "_id",
+          "name",
+          "phoneNumber",
+          "isFavourite",
+          "contactType"
+        ],
+        "properties": {
+          "_id": {
+            "description": "Contact’s id",
+            "type": "string",
+            "example": "66fef6664c33356ed36be923"
+          },
+          "name": {
+            "description": "Contact’s name",
+            "type": "string",
+            "example": "Kateryna Povalenko"
+          },
+          "phoneNumber": {
+            "description": "Contact’s phone number",
+            "type": "string",
+            "example": "+380000000005"
+          },
+          "email": {
+            "description": "Contact’s email",
+            "type": "string"
+          },
+          "isFavourite": {
+            "description": "A boolean field representing whether the contact is marked as a favourite. True if the contact is a favourite, otherwise false.",
+            "type": "boolean",
+            "default": false,
+            "example": true
+          },
+          "contactType": {
+            "description": "\"This is a field for specifying the type of contact; it is restricted to the following values: work, home, or personal",
+            "type": "string",
+            "enum": [
+              "work",
+              "home",
+              "personal"
+            ],
+            "default": "personal",
+            "example": "work"
+          },
+          "userId": {
+            "description": "Contact’s user id",
+            "type": "string",
+            "example": "66fef6664c33356ed36be923"
+          },
+          "photo": {
+            "description": "Link to contact’s photo",
+            "type": "string",
+            "example": "https://res.cloudinary.com/dcf1dkdyt/image/upload/v1730665462/vhf7oe7672n5lst6vf4v.webp"
+          },
+          "createdAt": {
+            "description": "The date the contact was created",
+            "type": "string",
+            "example": "2024-11-10T15:02:37.089Z"
+          },
+          "updatedAt": {
+            "description": "The date of the last update to the contact",
+            "type": "string",
+            "example": "2024-11-10T15:02:37.089Z"
+          }
+        }
+      }
+    },
+    "responses": {
+      "400": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 400
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Id: [66fef6664c33356ed36be923] is not valid"
+                }
+              }
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "sessionNotFound": {
+                "summary": "Session not found",
+                "value": {
+                  "status": 401,
+                  "message": "Session not found"
+                }
+              },
+              "accessTokenExpired": {
+                "summary": "Access token expired",
+                "value": {
+                  "status": 401,
+                  "message": "Access token expired"
+                }
+              },
+              "authHeader": {
+                "summary": "Provide Authorization header",
+                "value": {
+                  "status": 401,
+                  "message": "Provide Authorization header"
+                }
+              },
+              "authHeaderBearer": {
+                "summary": "Auth header should be of type Bearer",
+                "value": {
+                  "status": 401,
+                  "message": "Auth header should be of type Bearer"
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "User not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 404
+                },
+                "message": {
+                  "type": "string",
+                  "example": "User not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "404-2": {
+        "description": "Contact not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 404
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Contact not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
