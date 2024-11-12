@@ -1081,7 +1081,7 @@
         ],
         "requestBody": {
           "content": {
-            "application.json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "required": [
@@ -1120,53 +1120,11 @@
                     ],
                     "default": "personal",
                     "example": "work"
-                  }
-                }
-              }
-            },
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "name",
-                  "phoneNumber",
-                  "contactType"
-                ],
-                "properties": {
-                  "name": {
-                    "description": "Contact's name. min 3 max 20 characters",
-                    "type": "string",
-                    "example": "Kateryna Povalenko"
-                  },
-                  "phoneNumber": {
-                    "description": "Contact's phone number",
-                    "type": "string",
-                    "example": "+380000000005"
-                  },
-                  "email": {
-                    "description": "Contact’s email",
-                    "type": "string"
-                  },
-                  "isFavourite": {
-                    "description": "A boolean field representing whether the contact is marked as a favourite. True if the contact is a favourite, otherwise false.",
-                    "type": "boolean",
-                    "default": false,
-                    "example": true
-                  },
-                  "contactType": {
-                    "description": "This is a field for specifying the type of contact; it is restricted to the following values: work, home, or personal",
-                    "type": "string",
-                    "enum": [
-                      "work",
-                      "home",
-                      "personal"
-                    ],
-                    "default": "personal",
-                    "example": "work"
                   },
                   "photo": {
                     "description": "Link to contact’s photo",
                     "type": "string",
+                    "format": "binary",
                     "example": "https://res.cloudinary.com/dcf1dkdyt/image/upload/v1730665462/vhf7oe7672n5lst6vf4v.webp"
                   }
                 }
@@ -1562,7 +1520,7 @@
         "requestBody": {
           "description": "Request body for updating a contact's information",
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
@@ -1595,14 +1553,7 @@
                       "personal"
                     ],
                     "example": "work"
-                  }
-                }
-              }
-            },
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
+                  },
                   "photo": {
                     "type": "string",
                     "format": "binary",

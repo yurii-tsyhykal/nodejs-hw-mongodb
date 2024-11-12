@@ -1,4 +1,4 @@
-application/json:
+multipart/form-data:
         schema: 
           type: object
           properties:
@@ -24,10 +24,6 @@ application/json:
               type: string
               enum: ['work', 'home', 'personal']
               example: 'work'
-multipart/form-data:
-        schema: 
-          type: object
-          properties: 
             photo:
               type: string
               format: binary
